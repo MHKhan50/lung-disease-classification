@@ -1,5 +1,7 @@
 # Lung Disease Classification from Chest X-rays (MSc Dissertation, 2023)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23065564.svg)](https://doi.org/10.5281/zenodo.23065564)
+
 Deep learning experiments on the **NIH ChestX-ray14** dataset, carried out for my MSc in Big Data Technologies at Glasgow Caledonian University (dissertation supervised by Dr. Sajid Nazir).
 
 The notebook compares three ImageNet-pretrained convolutional neural networks — **ResNet-50** (PyTorch), **MobileNet** and **VGG16** (TensorFlow/Keras) — for detecting lung disease in chest radiographs.
@@ -61,4 +63,11 @@ jupyter notebook
 ## Author
 
 **Muzammal Hussain (M. M. Matyana)** — Software Engineer, MSc Big Data Technologies (Glasgow Caledonian University)
+
+Kaggle: [muzammalmatyana](https://www.kaggle.com/muzammalmatyana)
+
 GitHub: [MuzammalMunierMatyana](https://github.com/MuzammalMunierMatyana)
+
+## How to cite
+
+Matyana, M. M. (2026). *Lung disease classification from chest X-rays — MSc dissertation code (2023)* (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.23065564
