@@ -1,0 +1,7 @@
+kaggle.json
+*.zip
+images_*/
+Data_Entry_2017.csv
+.ipynb_checkpoints/
+venv/
+.DS_Store
