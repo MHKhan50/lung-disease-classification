@@ -53,6 +53,8 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
+The requirements are pinned to the versions used in 2023. TensorFlow 2.12 needs Python 3.8 to 3.11.
+
 ## References
 
 - Wang, X. et al. (2017). *ChestX-ray8: Hospital-scale chest X-ray database and benchmarks on weakly-supervised classification and localization of common thorax diseases.* CVPR.
@@ -62,7 +64,7 @@ jupyter notebook
 
 ## Author
 
-**Muzammal Hussain** — Software Engineer, MSc Big Data Technologies (Glasgow Caledonian University)
+**Muzammal Hussain** — Software Engineer and Data Scientist
 
 - GitHub: [MHKhan50](https://github.com/MHKhan50)
   
