@@ -5,3 +5,10 @@ Data_Entry_2017.csv
 .ipynb_checkpoints/
 venv/
 .DS_Store
+__pycache__/
+*.pyc
+*.h5
+*.pth
+*.pt
+.env
+checkpoints/

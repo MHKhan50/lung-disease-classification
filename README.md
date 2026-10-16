@@ -6,6 +6,8 @@ Deep learning experiments on the **NIH ChestX-ray14** dataset, carried out for m
 
 The notebook compares three ImageNet-pretrained convolutional neural networks — **ResNet-50** (PyTorch), **MobileNet** and **VGG16** (TensorFlow/Keras) — for detecting lung disease in chest radiographs.
 
+> **Version:** v1.0.0 (the code as submitted). The DOI badge above resolves to the latest Zenodo release; the citation below uses the v1.0.0 DOI.
+>
 > **Status:** this repository preserves the original 2023 dissertation code as submitted. A corrected and extended version (see *Limitations and next steps*) is in progress.
 
 ## Dataset
@@ -72,6 +74,6 @@ The requirements are pinned to the versions used in 2023. TensorFlow 2.12 needs 
   
 ## Citation
 
-If you use this code, please cite:
+GitHub also offers a *Cite this repository* button, which reads [`CITATION.cff`](CITATION.cff). If you use this code, please cite:
 
 > Hussain, M. (2026). *Lung Disease Classification from Chest X-rays — MSc dissertation code (2023)* (Version v1.0.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23065564

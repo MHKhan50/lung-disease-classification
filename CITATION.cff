@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it as below."
+title: "Lung Disease Classification from Chest X-rays (MSc dissertation code, 2023)"
+type: software
+version: 1.0.0
+doi: 10.5281/zenodo.23065564
+authors:
+  - family-names: Hussain
+    given-names: Muzammal
+license: MIT
+repository-code: "https://github.com/MHKhan50/lung-disease-classification"
+keywords:
+  - deep learning
+  - chest X-ray
+  - ChestX-ray14
+  - medical imaging
+  - ResNet
+  - MobileNet
+  - VGG16
