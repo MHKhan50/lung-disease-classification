@@ -1,0 +1,37 @@
+{
+  "run": {
+    "smoke": false,
+    "img": 224,
+    "batch": 128,
+    "lr": 0.0001,
+    "seed": 42,
+    "torch": "2.11.0+cu128",
+    "gpu": "Tesla T4",
+    "n_train": 77719,
+    "n_val": 8805,
+    "n_test": 25596,
+    "n_patients_train": 25207
+  },
+  "models": {
+    "densenet121": {
+      "test_mean_auroc": 0.8013800949185681,
+      "ci95": [
+        0.7964221508784747,
+        0.8062577365963938
+      ],
+      "best_val_mean_auroc": 0.8306731922705676,
+      "epochs_run": 7,
+      "train_hours": 0.783
+    },
+    "resnet50": {
+      "test_mean_auroc": 0.7950417158045283,
+      "ci95": [
+        0.7909051965837552,
+        0.7991111948224751
+      ],
+      "best_val_mean_auroc": 0.8272921143422867,
+      "epochs_run": 7,
+      "train_hours": 0.699
+    }
+  }
+}

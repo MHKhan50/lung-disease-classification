@@ -1,0 +1,8 @@
+{
+  "mean_ece_before": 0.2646959740187415,
+  "mean_ece_after": 0.005059092287497953,
+  "mean_brier_before": 0.17535397503194644,
+  "mean_brier_after": 0.05769614842725327,
+  "mean_auroc_after": 0.8006819146587583,
+  "note": "2-fold cross-fitting on random halves of the test images; patient IDs were not used for the halves"
+}

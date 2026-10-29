@@ -1,0 +1,6 @@
+# Reliability analysis (runs on a Mac, Python 3.9+)
+numpy>=1.23
+scikit-learn>=1.1
+matplotlib>=3.5
+# Training notebook (run on a Kaggle GPU; these are preinstalled there)
+# torch, torchvision, pandas, pillow
