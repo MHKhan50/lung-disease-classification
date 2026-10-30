@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it as below."
+title: "Lung Disease Classification from Chest X-rays"
+type: software
+authors:
+  - family-names: Hussain
+    given-names: Muzammal
+version: v2.1.0
+date-released: 2026-10-30
+doi: 10.5281/zenodo.23065563
+repository-code: "https://github.com/MHKhan50/lung-disease-classification"
+license: MIT
+keywords:
+  - chest X-ray
+  - ChestX-ray14
+  - multi-label classification
+  - calibration
+  - deep learning

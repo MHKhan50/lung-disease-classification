@@ -1,0 +1,26 @@
+{
+  "densenet121_seed1": {
+    "test_mean_auroc": 0.8007678975400203,
+    "test_mean_auroc_calibrated": 0.8007678975400203,
+    "mean_ece_raw": 0.2761758568740362,
+    "mean_ece_calibrated": 0.010636337489725466,
+    "mean_brier_raw": 0.1851120140815051,
+    "mean_brier_calibrated": 0.058214153264177754
+  },
+  "densenet121_seed2": {
+    "test_mean_auroc": 0.8027993653059894,
+    "test_mean_auroc_calibrated": 0.8027993653059894,
+    "mean_ece_raw": 0.2613828219868405,
+    "mean_ece_calibrated": 0.011479296157054368,
+    "mean_brier_raw": 0.1744210629339195,
+    "mean_brier_calibrated": 0.05813505795987376
+  },
+  "efficientnet_b0_seed42": {
+    "test_mean_auroc": 0.7900072114814581,
+    "test_mean_auroc_calibrated": 0.7900072114814581,
+    "mean_ece_raw": 0.29103703893702976,
+    "mean_ece_calibrated": 0.011496201580225993,
+    "mean_brier_raw": 0.19536926847152675,
+    "mean_brier_calibrated": 0.058905759853125524
+  }
+}

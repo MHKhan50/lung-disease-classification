@@ -1,18 +1,91 @@
-# Lung Disease Classification from Chest X-rays (MSc dissertation 2023, corrected V2 2026)
+# Lung Disease Classification from Chest X-rays
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23065563.svg)](https://doi.org/10.5281/zenodo.23065563)
 
-Deep learning experiments on the **NIH ChestX-ray14** dataset, carried out for my MSc in Big Data Technologies at Glasgow Caledonian University (dissertation supervised by Dr. Sajid Nazir).
+Multi-label classification of 14 thoracic findings on the **NIH ChestX-ray14** dataset, with a focus on whether the model's probabilities can be trusted, not only on how well it ranks images.
 
-The notebook compares three ImageNet-pretrained convolutional neural networks — **ResNet-50** (PyTorch), **MobileNet** and **VGG16** (TensorFlow/Keras) — for detecting lung disease in chest radiographs.
+The project started as my MSc project at Glasgow Caledonian University (supervised by Dr. Sajid Nazir) and has since been rebuilt twice:
 
-> **Status:** the original 2023 dissertation code is kept unchanged in `Lung_Disease_Classification.ipynb` (V1). A corrected V2, trained and evaluated in October 2026, is in [`v2/`](v2/) and summarised below.
+| Version | Folder | What it is |
+|---|---|---|
+| V1 | [`Lung_Disease_Classification.ipynb`](Lung_Disease_Classification.ipynb) | Original MSc project code, kept unchanged. Its set-up has known flaws (see below). |
+| V2 | [`v2/`](v2/) | First corrected run: 14 labels, official patient-wise split, per-class AUROC, calibration analysis. |
+| V2.1 | [`v2.1/`](v2.1/) | Three DenseNet121 seeds, EfficientNet-B0, calibration fitted on the validation set, patient-level intervals, sex and age subgroups, Grad-CAM. **Current version.** |
 
-## V2 (October 2026): multi-label, patient-wise, per-class AUROC
+> Research code only. Not a medical device and not for diagnosis.
+
+## Main results (V2.1)
+
+All runs use the same data, split and pipeline: ImageNet-pretrained backbone, 224x224 grayscale input, horizontal flips, AdamW (lr 1e-4), batch 128, class-weighted binary cross-entropy, early stopping on validation mean AUROC. Split: 77,719 training, 8,805 validation and 25,596 test images, with no patient in more than one split.
+
+| Model | Test mean AUROC | 95% interval (patient-level bootstrap) | Best validation mean AUROC | Mean ECE, raw → calibrated |
+|---|---|---|---|---|
+| DenseNet121, seed 42 (V2) | 0.801 | 0.796 to 0.806 (image-level) | 0.831 | — |
+| DenseNet121, seed 1 | 0.801 | 0.795 to 0.806 | 0.830 | 0.276 → 0.011 |
+| DenseNet121, seed 2 | **0.803** | 0.797 to 0.808 | **0.831** | 0.261 → 0.011 |
+| EfficientNet-B0 | 0.790 | 0.784 to 0.795 | 0.824 | 0.291 → 0.011 |
+| Average of the three DenseNet121 seeds | **0.814** | not computed | — | — |
+
+![Per-class AUROC](v2.1/analysis/per_class_auroc.png)
+
+## V2.1: seeds, validation-fitted calibration, subgroups and Grad-CAM
+
+- Notebook (Kaggle, T4 GPU, about 4 hours including image caching): [`v2.1/lung-v21-chestxray14.ipynb`](v2.1/lung-v21-chestxray14.ipynb)
+- Saved predictions and Kaggle outputs: [`v2.1/results/`](v2.1/results/)
+- Analysis without a GPU: [`v2.1/analyze_v21.py`](v2.1/analyze_v21.py), which writes [`v2.1/analysis/`](v2.1/analysis/)
+
+### What I found
+
+1. **Seed-to-seed variation is small.** The three DenseNet121 seeds scored 0.801, 0.801 and 0.803 (mean 0.8016, standard deviation 0.0010). Differences between set-ups of less than about 0.003 should not be read as real.
+2. **Averaging the three seeds is the cheapest real gain.** The averaged prediction reaches 0.814, about 0.012 above any single seed, at three times the inference cost.
+3. **EfficientNet-B0 is faster but weaker.** 0.790 mean AUROC, about 0.012 below DenseNet121, with roughly half the training time (0.39 against 0.70 hours).
+4. **Calibration fitted on the validation set works.** Per-class Platt scaling fitted on the 8,805 validation images and checked on the test set brings mean ECE from 0.26–0.29 to 0.011 and mean Brier score from 0.17–0.20 to 0.058, with AUROC unchanged. This replaces V2's check, which fitted and tested on halves of the test set.
+5. **Calibration depends on the population.** The official test set is much "sicker" than the validation set: 62% of test images have at least one finding against 43% of validation images, and pneumothorax is 3.4 times as common (10.4% against 3.0%). Calibration still held for most labels, but pneumothorax ended up under-predicted (mean calibrated probability 0.065 against a prevalence of 0.104; ECE 0.041, the worst label). A hospital using a model like this would need to recalibrate on its own patients.
+6. **Referring uncertain images helps, but less after calibration.** Keeping the 50% of images with the lowest mean prediction entropy raises DenseNet121 seed 2 from 0.803 to 0.822 with raw probabilities, but only to 0.807 with calibrated ones. For EfficientNet-B0 the calibrated gain is close to zero. Entropy of calibrated probabilities is a weak signal of which images are hard; disagreement between seeds may be a better one (not yet tested).
+7. **Sex makes little difference; young patients do.** Mean AUROC for men and women is within 0.006 for every model. For patients under 40 (8,290 test images) it is lower and unstable: 0.767 and 0.796 for the two DenseNet121 seeds and 0.741 for EfficientNet-B0, the largest spread of any group. My guess is that several labels have few positive cases in younger patients, which makes their AUROC noisy; I have not checked the counts yet.
+8. **Grad-CAM looks plausible for some labels, not for others.** For cardiomegaly the heatmap sits on the heart and for effusion on the lower lung fields. For pneumothorax it spreads over both lungs instead of the lung edge. Many pneumothorax images in this dataset show a chest drain, and models are known to use the drain as a shortcut; these heatmaps can neither confirm nor rule that out. The six images are the highest-scoring correct case per label, so they show easy cases, not typical ones.
+
+![Raw vs calibrated probabilities](v2.1/analysis/calibration.png)
+
+![Referral](v2.1/analysis/referral.png)
+
+![Subgroups](v2.1/analysis/subgroups.png)
+
+![Grad-CAM examples](v2.1/analysis/gradcam_examples.png)
+
+### A bug I found and fixed
+
+In the Kaggle run, the line that sorts images by confidence ended with `[::-1]`, so the referral step kept the *least* confident images and appeared to make results worse (0.801 → 0.771). The saved outputs from that run (`selective_mean_auroc_calibrated` in `summary_v21.json` and `selective_calibrated_v21.csv`) are left as they were for transparency. The notebook line is fixed, and the corrected numbers above come from re-reading the saved predictions with `analyze_v21.py`. A unit test now checks that the most confident images come first. No other result is affected.
+
+### Model choice for a demo
+
+DenseNet121 seed 2 has the highest validation mean AUROC (0.831), so it is the single model to use; it was chosen on validation, not on test. Its per-class calibration parameters, fitted on the validation set, are in [`v2.1/analysis/platt_params.json`](v2.1/analysis/platt_params.json). Model weights are not stored in this repository.
+
+### Limitations of V2.1
+
+- Several seeds only for DenseNet121; EfficientNet-B0 and ResNet50 have one run each.
+- Patient-level intervals use 200 bootstrap resamples and cover single models only, not the seed average.
+- Subgroup AUROC uses raw probabilities, has no intervals, and does not report positive counts per group. Four test images with a recorded age above 100 (data entry errors) fall outside the age bands.
+- Still 224x224 input with flips only, labels text-mined from radiology reports, and images from a single hospital.
+- Not a medical device and not for diagnosis.
+
+### Reproduce V2.1
+
+1. Training: import `v2.1/lung-v21-chestxray14.ipynb` into Kaggle, add the `nih-chest-xrays/data` dataset, choose a T4 GPU and turn Internet on, then *Save Version, Save & Run All*.
+2. Analysis (Mac, Python 3.9+), from the repository root:
+
+```bash
+pip install -r v2.1/requirements.txt
+cd v2.1
+python3 analyze_v21.py
+python3 -m unittest discover -s tests
+```
+
+## V2: multi-label, patient-wise, per-class AUROC (first corrected run)
 
 V2 fixes the three main problems listed under *Limitations* below: it treats the task as **14 labels** (sigmoid outputs, binary cross-entropy with class weights), uses the **official patient-wise split** (`train_val_list.txt` / `test_list.txt`, with a validation set split by patient), and reports **per-class AUROC** on the official test set.
 
-Article: [I rebuilt my MSc chest X-ray model](https://masmatixinnovations.co.uk/insights/lung-xray-v2-calibration.html)
+Article: [I rebuilt my chest X-ray model](https://masmatixinnovations.co.uk/insights/lung-xray-v2-calibration.html)
 
 - Models: DenseNet121 and ResNet50, ImageNet-pretrained, same pipeline, 224x224, AdamW (lr 1e-4), batch 128, early stopping on validation mean AUROC.
 - Data: 77,719 training, 8,805 validation and 25,596 test images; no patient appears in more than one split (checked in the code).
@@ -39,7 +112,7 @@ Per-class test AUROC (DenseNet121): highest for emphysema (0.912), hernia (0.892
 
 ### V1 vs V2
 
-| | V1 (2023) | V2 (2026) |
+| | V1 (MSc) | V2 |
 |---|---|---|
 | Task | 836 label combinations (MobileNet, VGG16) or binary (ResNet-50) | 14 labels, multi-label |
 | Split | random by image (patient leakage) | official, by patient |
@@ -62,6 +135,8 @@ The V1 and V2 numbers measure different things and cannot be compared directly. 
 - NIH labels were extracted from radiology reports by text mining and contain errors. All images come from one hospital, so results may not transfer to other sites.
 - Not a medical device and not for diagnosis.
 
+V2.1 addresses the first and third points: two more seeds, and calibration fitted on the validation set.
+
 ### Reproduce V2
 
 1. Training: import `v2/lung-v2-chestxray14.ipynb` into Kaggle, add the `nih-chest-xrays/data` dataset, choose a GPU and turn Internet on, then *Save Version, Save & Run All*. Set `SMOKE = True` first for a ten-minute check.
@@ -69,7 +144,7 @@ The V1 and V2 numbers measure different things and cannot be compared directly. 
 
 Model weights are not stored in this repository.
 
-## V1 (2023): dataset and experiments
+## V1 (MSc project): dataset and experiments
 
 ### Dataset
 
@@ -97,7 +172,7 @@ Looking back at this work, several issues limit how far the numbers above can be
 4. **Patient leakage.** Splits were made by image, not by patient, so X-rays of the same person can appear in both training and validation. The dataset's official patient-wise split (`train_val_list.txt` / `test_list.txt`) should be used.
 5. **Models are not directly comparable**, since ResNet-50 was trained on a different task and data subset from MobileNet and VGG16.
 
-All five are addressed in V2 above (item 3 through early stopping). Still planned: EfficientNet and MobileNet in the same pipeline, Grad-CAM visualisations, sex and age subgroup results, and a chest X-ray foundation model as a comparison.
+All five are addressed in V2 (item 3 through early stopping). EfficientNet, Grad-CAM and sex and age subgroup results followed in V2.1. Still open: MobileNet in the same pipeline and a chest X-ray foundation model as a comparison.
 
 ## How to run V1
 
@@ -119,20 +194,26 @@ jupyter notebook
 ## References
 
 - Wang, X. et al. (2017). *ChestX-ray8: Hospital-scale chest X-ray database and benchmarks on weakly-supervised classification and localization of common thorax diseases.* CVPR.
+- Rajpurkar, P. et al. (2017). *CheXNet: Radiologist-level pneumonia detection on chest X-rays with deep learning.* arXiv:1711.05225.
+- Huang, G. et al. (2017). *Densely connected convolutional networks.* CVPR.
 - He, K. et al. (2016). *Deep residual learning for image recognition.* CVPR.
+- Tan, M. & Le, Q. (2019). *EfficientNet: Rethinking model scaling for convolutional neural networks.* ICML.
 - Howard, A. G. et al. (2017). *MobileNets: Efficient convolutional neural networks for mobile vision applications.* arXiv:1704.04861.
 - Simonyan, K. & Zisserman, A. (2015). *Very deep convolutional networks for large-scale image recognition.* ICLR.
+- Platt, J. (1999). *Probabilistic outputs for support vector machines and comparisons to regularized likelihood methods.* Advances in Large Margin Classifiers.
+- Guo, C. et al. (2017). *On calibration of modern neural networks.* ICML.
+- Selvaraju, R. R. et al. (2017). *Grad-CAM: Visual explanations from deep networks via gradient-based localization.* ICCV.
+- Oakden-Rayner, L. et al. (2020). *Hidden stratification causes clinically meaningful failures in machine learning for medical imaging.* ACM CHIL.
 
 ## Author
 
-**Muzammal Hussain** — Software Engineer, MSc Big Data Technologies (Glasgow Caledonian University)
+**Muzammal Hussain**, Software Engineer, Data Scientist and AI Researcher
 
 - GitHub: [MHKhan50](https://github.com/MHKhan50)
-  
 - Kaggle: [muzammalhussain11](https://www.kaggle.com/muzammalhussain11)
-  
+
 ## Citation
 
-If you use this code, please cite:
+If you use this code, please cite it (GitHub's *Cite this repository* button uses [`CITATION.cff`](CITATION.cff)):
 
-> Hussain, M. (2026). *Lung Disease Classification from Chest X-rays — MSc dissertation code (2023)* (Version v1.0.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23065564
+> Hussain, M. (2026). *Lung Disease Classification from Chest X-rays* (Version v2.1.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23065563

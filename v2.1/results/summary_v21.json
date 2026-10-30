@@ -1,0 +1,95 @@
+{
+  "run": {
+    "smoke": false,
+    "img": 224,
+    "batch": 128,
+    "lr": 0.0001,
+    "split_seed": 42,
+    "runs": [
+      [
+        "densenet121",
+        1
+      ],
+      [
+        "densenet121",
+        2
+      ],
+      [
+        "efficientnet_b0",
+        42
+      ]
+    ],
+    "n_train": 77719,
+    "n_val": 8805,
+    "n_test": 25596,
+    "densenet121_new_seed_test_aurocs": [
+      0.8007678975400203,
+      0.8027993653059894
+    ]
+  },
+  "models": {
+    "densenet121_seed1": {
+      "test_mean_auroc": 0.8007678975400203,
+      "patient_bootstrap_ci95": [
+        0.795068402130931,
+        0.8063140364889245
+      ],
+      "best_val_mean_auroc": 0.8295387999562023,
+      "epochs_run": 7,
+      "train_hours": 0.704,
+      "mean_ece_raw": 0.2761758570510677,
+      "mean_ece_val_calibrated": 0.010636337204563412,
+      "mean_brier_raw": 0.18511201408150502,
+      "mean_brier_val_calibrated": 0.05821415326417779,
+      "selective_mean_auroc_calibrated": {
+        "1.0": 0.8007678975400203,
+        "0.9": 0.7915545226397073,
+        "0.8": 0.7858159891140464,
+        "0.7": 0.7813412675384279,
+        "0.5": 0.7705453484353121
+      }
+    },
+    "densenet121_seed2": {
+      "test_mean_auroc": 0.8027993653059894,
+      "patient_bootstrap_ci95": [
+        0.7966543315756643,
+        0.8082859072755005
+      ],
+      "best_val_mean_auroc": 0.8309079385994028,
+      "epochs_run": 7,
+      "train_hours": 0.704,
+      "mean_ece_raw": 0.26138282193750595,
+      "mean_ece_val_calibrated": 0.011479295798015838,
+      "mean_brier_raw": 0.1744210629339195,
+      "mean_brier_val_calibrated": 0.05813505795987376,
+      "selective_mean_auroc_calibrated": {
+        "1.0": 0.8027993653059894,
+        "0.9": 0.7927987916084298,
+        "0.8": 0.7869004473947855,
+        "0.7": 0.7816236707374458,
+        "0.5": 0.7753456489373464
+      }
+    },
+    "efficientnet_b0_seed42": {
+      "test_mean_auroc": 0.7900072114814581,
+      "patient_bootstrap_ci95": [
+        0.7835991402114494,
+        0.7954691721349456
+      ],
+      "best_val_mean_auroc": 0.8238380227519768,
+      "epochs_run": 7,
+      "train_hours": 0.39,
+      "mean_ece_raw": 0.29103703881693266,
+      "mean_ece_val_calibrated": 0.011496201454067165,
+      "mean_brier_raw": 0.1953692684715267,
+      "mean_brier_val_calibrated": 0.058905759853125524,
+      "selective_mean_auroc_calibrated": {
+        "1.0": 0.7900072114814581,
+        "0.9": 0.7803513430685376,
+        "0.8": 0.7754620871132181,
+        "0.7": 0.7720605828925841,
+        "0.5": 0.7653334732574221
+      }
+    }
+  }
+}
