@@ -30,8 +30,9 @@ All runs use the same data, split and pipeline: ImageNet-pretrained backbone, 22
 
 ## V2.1: seeds, validation-fitted calibration, subgroups and Grad-CAM
 
-- Notebook (Kaggle, T4 GPU, about 4 hours including image caching): [`v2.1/lung-v21-chestxray14.ipynb`](v2.1/lung-v21-chestxray14.ipynb)
+- Notebook (Kaggle, T4 GPU, about 4 hours including image caching): [`v2.1/lung-v21-chestxray14.ipynb`](v2.1/lung-v21-chestxray14.ipynb) · [run on Kaggle](https://www.kaggle.com/code/muzammalhussain11/chestx-ray14-v2-1-seeds-calibration-subgroups)
 - Saved predictions and Kaggle outputs: [`v2.1/results/`](v2.1/results/)
+- Article: [Three training runs, one bug and a sicker test set](https://masmatixinnovations.co.uk/insights/lung-xray-v21-seeds-calibration.html)
 - Analysis without a GPU: [`v2.1/analyze_v21.py`](v2.1/analyze_v21.py), which writes [`v2.1/analysis/`](v2.1/analysis/)
 
 ### What I found
@@ -85,7 +86,7 @@ python3 -m unittest discover -s tests
 
 V2 fixes the three main problems listed under *Limitations* below: it treats the task as **14 labels** (sigmoid outputs, binary cross-entropy with class weights), uses the **official patient-wise split** (`train_val_list.txt` / `test_list.txt`, with a validation set split by patient), and reports **per-class AUROC** on the official test set.
 
-Article: [I rebuilt my chest X-ray model](https://masmatixinnovations.co.uk/insights/lung-xray-v2-calibration.html)
+Article: [I rebuilt my chest X-ray model](https://masmatixinnovations.co.uk/insights/lung-xray-v2-calibration.html) · Kaggle notebook: [ChestX-ray14 V2](https://www.kaggle.com/code/muzammalhussain11/chestx-ray14-v2-multi-label-patient-wise-auroc)
 
 - Models: DenseNet121 and ResNet50, ImageNet-pretrained, same pipeline, 224x224, AdamW (lr 1e-4), batch 128, early stopping on validation mean AUROC.
 - Data: 77,719 training, 8,805 validation and 25,596 test images; no patient appears in more than one split (checked in the code).
