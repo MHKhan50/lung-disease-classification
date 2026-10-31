@@ -12,6 +12,8 @@ The project started as my MSc project at Glasgow Caledonian University (supervis
 | V2 | [`v2/`](v2/) | First corrected run: 14 labels, official patient-wise split, per-class AUROC, calibration analysis. |
 | V2.1 | [`v2.1/`](v2.1/) | Three DenseNet121 seeds, EfficientNet-B0, calibration fitted on the validation set, patient-level intervals, sex and age subgroups, Grad-CAM. **Current version.** |
 
+**[Live demo on Hugging Face](https://huggingface.co/spaces/MHkhan50/chest-xray-14-findings)**: upload a frontal chest X-ray and get calibrated probabilities for 14 findings with a heatmap. It runs entirely in the browser, so the image is never uploaded. Source in [`demo/`](demo/).
+
 > Research code only. Not a medical device and not for diagnosis.
 
 ## Main results (V2.1)
