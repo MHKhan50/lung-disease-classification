@@ -5,7 +5,7 @@ Re-reads the probabilities saved by the Kaggle run and writes every table and ch
 Inputs (results/):
   val_targets.npy, test_targets.npy
   <run>_val_probs.npy, <run>_test_probs.npy for densenet121_seed1, densenet121_seed2, efficientnet_b0_seed42
-  subgroups_v21.csv (written on Kaggle, where patient age and sex are available)
+  test_metadata.csv (patient ID, age, sex and view of each test image, in the same order as test_targets.npy)
   ../v2/results/densenet121_test_probs.npy (the V2 DenseNet121 run, seed 42), used for the seed comparison
 
 Outputs (analysis/):
@@ -15,6 +15,8 @@ Outputs (analysis/):
   calibration_summary.json
   platt_params.json       per-class Platt parameters fitted on the validation set (DenseNet121 seed 2)
   referral.csv            mean AUROC on the most confident images at several coverage levels
+  subgroups.csv           mean AUROC by sex and age band, over all labels and over labels with enough positives
+  subgroup_positives.csv  positive cases per label in each subgroup
   per_class_auroc.png, calibration.png, referral.png, subgroups.png
 """
 from __future__ import annotations
@@ -35,6 +37,8 @@ LABELS = [
 RUNS = ["densenet121_seed1", "densenet121_seed2", "efficientnet_b0_seed42"]
 APP_RUN = "densenet121_seed2"  # highest validation mean AUROC (0.831); chosen on validation, not test
 COVERAGES = (1.0, 0.9, 0.8, 0.7, 0.5)
+MIN_POSITIVES = 10  # labels with fewer positives in a subgroup give an AUROC too noisy to average
+GROUPS = ["sex=M", "sex=F", "age<40", "age 40-59", "age 60-100"]
 
 
 def per_class_auroc(y: np.ndarray, p: np.ndarray) -> list:
@@ -96,6 +100,25 @@ def referral(y: np.ndarray, p: np.ndarray, coverages: tuple = COVERAGES) -> list
     return rows
 
 
+def group_masks(meta: list) -> dict:
+    age = np.array([int(m["age"]) for m in meta])
+    sex = np.array([m["sex"] for m in meta])
+    return {"sex=M": sex == "M", "sex=F": sex == "F", "age<40": age < 40,
+            "age 40-59": (age >= 40) & (age < 60), "age 60-100": (age >= 60) & (age <= 100)}
+
+
+def subgroup_rows(y: np.ndarray, p: np.ndarray, masks: dict, min_pos: int = MIN_POSITIVES) -> list:
+    """Mean AUROC per subgroup over all labels, and over labels with at least min_pos positives there."""
+    rows = []
+    for g, m in masks.items():
+        scores = np.array(per_class_auroc(y[m], p[m]))
+        enough = y[m].sum(0) >= min_pos
+        rows.append({"group": g, "n_images": int(m.sum()), "mean_auroc_all_labels": float(np.nanmean(scores)),
+                     "mean_auroc_labels_with_enough_positives": float(np.nanmean(scores[enough])),
+                     "labels_excluded": ";".join(LABELS[k] for k in np.where(~enough)[0])})
+    return rows
+
+
 def write_csv(path: Path, rows: list) -> None:
     with path.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
@@ -152,7 +175,7 @@ def charts(out: Path, auroc: dict, calib: list, ref: dict, subgroups: list) -> N
     plt.savefig(out / "referral.png", dpi=150)
     plt.close()
 
-    groups = ["sex=M", "sex=F", "age<40", "age 40-59", "age 60-100"]
+    groups = GROUPS
     runs = list(dict.fromkeys(r["run"] for r in subgroups))
     fig, ax = plt.subplots(figsize=(8, 4.2))
     gx = np.arange(len(groups))
@@ -160,13 +183,14 @@ def charts(out: Path, auroc: dict, calib: list, ref: dict, subgroups: list) -> N
     names = {"densenet121_seed1": "DenseNet121 seed 1", "densenet121_seed2": "DenseNet121 seed 2",
              "efficientnet_b0_seed42": "EfficientNet-B0"}
     for i, run in enumerate(runs):
-        vals = [next(float(r["mean_auroc"]) for r in subgroups if r["run"] == run and r["group"] == g) for g in groups]
+        vals = [next(r["mean_auroc_labels_with_enough_positives"] for r in subgroups if r["run"] == run and r["group"] == g)
+                for g in groups]
         ax.bar(gx + (i - (len(runs) - 1) / 2) * w, vals, w, label=names.get(run, run), color=colors.get(names.get(run)))
     ax.set_xticks(gx)
     ax.set_xticklabels(groups)
     ax.set_ylim(0.70, 0.82)
     ax.set_ylabel("Mean test AUROC")
-    ax.set_title("Mean AUROC by sex and age band (test split)")
+    ax.set_title(f"Mean AUROC by sex and age band (labels with at least {MIN_POSITIVES} positives in the group)")
     ax.legend(fontsize=8)
     plt.tight_layout()
     plt.savefig(out / "subgroups.png", dpi=150)
@@ -250,12 +274,21 @@ def main() -> None:
                 ref[names[r]] = rows
     write_csv(out / "referral.csv", ref_rows)
 
-    with (res / "subgroups_v21.csv").open() as f:
-        subgroups = list(csv.DictReader(f))
+    with (res / "test_metadata.csv").open() as f:
+        meta = list(csv.DictReader(f))
+    if len(meta) != len(y_test):
+        raise SystemExit("test_metadata.csv does not match test_targets.npy")
+    masks = group_masks(meta)
+    subgroups = [dict(run=r, **row) for r in RUNS for row in subgroup_rows(y_test, test[r], masks)]
+    write_csv(out / "subgroups.csv", subgroups)
+    write_csv(out / "subgroup_positives.csv",
+              [dict(label=l, **{g: int(y_test[m, k].sum()) for g, m in masks.items()}) for k, l in enumerate(LABELS)])
     charts(out, auroc, calib, ref, subgroups)
 
     print(json.dumps({"seeds": seeds, "calibration": summary}, indent=2))
     for row in ref_rows:
+        print(row)
+    for row in subgroups:
         print(row)
 
 

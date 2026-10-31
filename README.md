@@ -31,7 +31,7 @@ All runs use the same data, split and pipeline: ImageNet-pretrained backbone, 22
 ## V2.1: seeds, validation-fitted calibration, subgroups and Grad-CAM
 
 - Notebook (Kaggle, T4 GPU, about 4 hours including image caching): [`v2.1/lung-v21-chestxray14.ipynb`](v2.1/lung-v21-chestxray14.ipynb) · [run on Kaggle](https://www.kaggle.com/code/muzammalhussain11/chestx-ray14-v2-1-seeds-calibration-subgroups)
-- Saved predictions and Kaggle outputs: [`v2.1/results/`](v2.1/results/)
+- Saved predictions and Kaggle outputs: [`v2.1/results/`](v2.1/results/), with the age, sex and view of each test image in `test_metadata.csv` (from the NIH metadata)
 - Article: [Three training runs, one bug and a sicker test set](https://masmatixinnovations.co.uk/insights/lung-xray-v21-seeds-calibration.html)
 - Browser demo export: [`v2.1/chestx-ray14-v2-1-onnx-export.ipynb`](v2.1/chestx-ray14-v2-1-onnx-export.ipynb) converts DenseNet121 seed 2 to ONNX (raw probabilities and class activation maps), checks it against PyTorch, and saves three example test images
 - Analysis without a GPU: [`v2.1/analyze_v21.py`](v2.1/analyze_v21.py), which writes [`v2.1/analysis/`](v2.1/analysis/)
@@ -44,7 +44,7 @@ All runs use the same data, split and pipeline: ImageNet-pretrained backbone, 22
 4. **Calibration fitted on the validation set works.** Per-class Platt scaling fitted on the 8,805 validation images and checked on the test set brings mean ECE from 0.26–0.29 to 0.011 and mean Brier score from 0.17–0.20 to 0.058, with AUROC unchanged. This replaces V2's check, which fitted and tested on halves of the test set.
 5. **Calibration depends on the population.** The official test set is much "sicker" than the validation set: 62% of test images have at least one finding against 43% of validation images, and pneumothorax is 3.4 times as common (10.4% against 3.0%). Calibration still held for most labels, but pneumothorax ended up under-predicted (mean calibrated probability 0.065 against a prevalence of 0.104; ECE 0.041, the worst label). A hospital using a model like this would need to recalibrate on its own patients.
 6. **Referring uncertain images helps, but less after calibration.** Keeping the 50% of images with the lowest mean prediction entropy raises DenseNet121 seed 2 from 0.803 to 0.822 with raw probabilities, but only to 0.807 with calibrated ones. For EfficientNet-B0 the calibrated gain is close to zero. Entropy of calibrated probabilities is a weak signal of which images are hard; disagreement between seeds may be a better one (not yet tested).
-7. **Sex makes little difference; young patients do.** Mean AUROC for men and women is within 0.006 for every model. For patients under 40 (8,290 test images) it is lower and unstable: 0.767 and 0.796 for the two DenseNet121 seeds and 0.741 for EfficientNet-B0, the largest spread of any group. My guess is that several labels have few positive cases in younger patients, which makes their AUROC noisy; I have not checked the counts yet.
+7. **Age and sex make little difference; an apparent age effect was a counting artefact.** The first subgroup table showed patients under 40 (8,290 test images) as lower and unstable: 0.767, 0.796 and 0.741 mean AUROC. Counting positive cases explained it: the under-40 group contains a single hernia case, so its hernia AUROC is decided by where one image ranks (0.14 to 0.69 across the runs), and that one number moved the 14-label mean. Averaging only over labels with at least 10 positives in the group, patients under 40 score 0.804, 0.804 and 0.788, the same as the whole test set. Men and women are within 0.006 for every model. The oldest band (60 to 100) is the lowest, by about 0.01. Counts: [`v2.1/analysis/subgroup_positives.csv`](v2.1/analysis/subgroup_positives.csv); scores: [`v2.1/analysis/subgroups.csv`](v2.1/analysis/subgroups.csv).
 8. **Grad-CAM looks plausible for some labels, not for others.** For cardiomegaly the heatmap sits on the heart and for effusion on the lower lung fields. For pneumothorax it spreads over both lungs instead of the lung edge. Many pneumothorax images in this dataset show a chest drain, and models are known to use the drain as a shortcut; these heatmaps can neither confirm nor rule that out. The six images are the highest-scoring correct case per label, so they show easy cases, not typical ones.
 
 ![Raw vs calibrated probabilities](v2.1/analysis/calibration.png)
@@ -67,7 +67,7 @@ DenseNet121 seed 2 has the highest validation mean AUROC (0.831), so it is the s
 
 - Several seeds only for DenseNet121; EfficientNet-B0 and ResNet50 have one run each.
 - Patient-level intervals use 200 bootstrap resamples and cover single models only, not the seed average.
-- Subgroup AUROC uses raw probabilities, has no intervals, and does not report positive counts per group. Four test images with a recorded age above 100 (data entry errors) fall outside the age bands.
+- Subgroup AUROC has no intervals. The Kaggle run's own subgroup file (`results/subgroups_v21.csv`) averages over all 14 labels, including hernia with one positive case under 40; the analysis script reports both versions. Four test images with a recorded age above 100 (data entry errors) fall outside the age bands.
 - Still 224x224 input with flips only, labels text-mined from radiology reports, and images from a single hospital.
 - Not a medical device and not for diagnosis.
 
@@ -218,4 +218,4 @@ jupyter notebook
 
 If you use this code, please cite it (GitHub's *Cite this repository* button uses [`CITATION.cff`](CITATION.cff)):
 
-> Hussain, M. (2026). *Lung Disease Classification from Chest X-rays* (Version v2.1.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23065563
+> Hussain, M. (2026). *Lung Disease Classification from Chest X-rays* (Version v2.1.1) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23065563

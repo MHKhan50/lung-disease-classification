@@ -52,6 +52,16 @@ class AnalysisTests(unittest.TestCase):
         params = av.fit_platt(y, p)
         self.assertAlmostEqual(av.mean_auroc(y, p), av.mean_auroc(y, av.apply_platt(params, p)), places=9)
 
+    def test_subgroup_mean_skips_labels_with_too_few_positives(self):
+        y, p = synthetic(2000)
+        y[:, 13] = 0
+        y[0, 13] = 1                    # one positive only, ranked last
+        p[:, 13] = 0.9
+        p[0, 13] = 0.0
+        rows = av.subgroup_rows(y, p, {"all": np.ones(len(y), dtype=bool)}, min_pos=10)
+        self.assertEqual(rows[0]["labels_excluded"], "Hernia")
+        self.assertGreater(rows[0]["mean_auroc_labels_with_enough_positives"], rows[0]["mean_auroc_all_labels"])
+
     def test_ece_is_zero_for_matching_frequencies(self):
         self.assertAlmostEqual(av.ece(np.array([0, 1] * 50), np.full(100, 0.5)), 0.0, places=9)
 

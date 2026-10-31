@@ -1,0 +1,16 @@
+run,group,n_images,mean_auroc_all_labels,mean_auroc_labels_with_enough_positives,labels_excluded
+densenet121_seed1,sex=M,14882,0.7981,0.7981,
+densenet121_seed1,sex=F,10714,0.803,0.803,
+densenet121_seed1,age<40,8290,0.7674,0.8041,Hernia
+densenet121_seed1,age 40-59,11224,0.7969,0.7969,
+densenet121_seed1,age 60-100,6078,0.7877,0.7877,
+densenet121_seed2,sex=M,14882,0.8006,0.8006,
+densenet121_seed2,sex=F,10714,0.8037,0.8037,
+densenet121_seed2,age<40,8290,0.7959,0.8044,Hernia
+densenet121_seed2,age 40-59,11224,0.8009,0.8009,
+densenet121_seed2,age 60-100,6078,0.7892,0.7892,
+efficientnet_b0_seed42,sex=M,14882,0.7897,0.7897,
+efficientnet_b0_seed42,sex=F,10714,0.7893,0.7893,
+efficientnet_b0_seed42,age<40,8290,0.7414,0.7876,Hernia
+efficientnet_b0_seed42,age 40-59,11224,0.7886,0.7886,
+efficientnet_b0_seed42,age 60-100,6078,0.7787,0.7787,
