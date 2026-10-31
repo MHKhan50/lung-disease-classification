@@ -33,6 +33,7 @@ All runs use the same data, split and pipeline: ImageNet-pretrained backbone, 22
 - Notebook (Kaggle, T4 GPU, about 4 hours including image caching): [`v2.1/lung-v21-chestxray14.ipynb`](v2.1/lung-v21-chestxray14.ipynb) · [run on Kaggle](https://www.kaggle.com/code/muzammalhussain11/chestx-ray14-v2-1-seeds-calibration-subgroups)
 - Saved predictions and Kaggle outputs: [`v2.1/results/`](v2.1/results/)
 - Article: [Three training runs, one bug and a sicker test set](https://masmatixinnovations.co.uk/insights/lung-xray-v21-seeds-calibration.html)
+- Browser demo export: [`v2.1/chestx-ray14-v2-1-onnx-export.ipynb`](v2.1/chestx-ray14-v2-1-onnx-export.ipynb) converts DenseNet121 seed 2 to ONNX (raw probabilities and class activation maps), checks it against PyTorch, and saves three example test images
 - Analysis without a GPU: [`v2.1/analyze_v21.py`](v2.1/analyze_v21.py), which writes [`v2.1/analysis/`](v2.1/analysis/)
 
 ### What I found
