@@ -4,7 +4,7 @@
 
 | File | What it is |
 |---|---|
-| `main.pdf` | The paper |
+| `main.pdf` | The paper, also on Zenodo: [doi:10.5281/zenodo.23840865](https://doi.org/10.5281/zenodo.23840865) |
 | `main.tex`, `references.bib`, `main.bbl`, `figures/` | LaTeX source (arXiv-ready: upload these files) |
 | `analysis.py` | Extra analyses used in the paper; writes `results.json` and the figures |
 | `results.json` | Every number in the paper that is not already in `v2.1/analysis/` |
