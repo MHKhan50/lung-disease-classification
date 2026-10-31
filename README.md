@@ -4,13 +4,13 @@
 
 Multi-label classification of 14 thoracic findings on the **NIH ChestX-ray14** dataset, with a focus on whether the model's probabilities can be trusted, not only on how well it ranks images.
 
-The project started as my MSc project at Glasgow Caledonian University (supervised by Dr. Sajid Nazir) and has since been rebuilt twice:
+The project started as my MSc project at Glasgow Caledonian University (2022–23, supervised by Dr. Sajid Nazir). In 2026 I rebuilt it twice, fixing the problems in the original set-up:
 
 | Version | Folder | What it is |
 |---|---|---|
-| V1 | [`Lung_Disease_Classification.ipynb`](Lung_Disease_Classification.ipynb) | Original MSc project code, kept unchanged. Its set-up has known flaws (see below). |
-| V2 | [`v2/`](v2/) | First corrected run: 14 labels, official patient-wise split, per-class AUROC, calibration analysis. |
-| V2.1 | [`v2.1/`](v2.1/) | Three DenseNet121 seeds, EfficientNet-B0, calibration fitted on the validation set, patient-level intervals, sex and age subgroups, Grad-CAM. **Current version.** |
+| V1 (2022–23) | [`Lung_Disease_Classification.ipynb`](Lung_Disease_Classification.ipynb) | Original MSc project code, kept unchanged. Its set-up has known flaws (see below). |
+| V2 (2026) | [`v2/`](v2/) | First corrected run: 14 labels, official patient-wise split, per-class AUROC, calibration analysis. |
+| V2.1 (2026) | [`v2.1/`](v2.1/) | Three DenseNet121 seeds, EfficientNet-B0, calibration fitted on the validation set, patient-level intervals, sex and age subgroups, Grad-CAM. **Current version.** |
 
 **[Live demo on Hugging Face](https://huggingface.co/spaces/MHkhan50/chest-xray-14-findings)**: upload a frontal chest X-ray and get calibrated probabilities for 14 findings with a heatmap. It runs entirely in the browser, so the image is never uploaded. Source in [`demo/`](demo/).
 
@@ -150,7 +150,7 @@ V2.1 addresses the first and third points: two more seeds, and calibration fitte
 
 Model weights are not stored in this repository.
 
-## V1 (MSc project): dataset and experiments
+## V1 (MSc project, 2022–23): dataset and experiments
 
 ### Dataset
 
