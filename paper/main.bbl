@@ -1,0 +1,118 @@
+\begin{thebibliography}{15}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Wang et~al.(2017)Wang, Peng, Lu, Lu, Bagheri, and
+  Summers]{wang2017chestxray8}
+Xiaosong Wang, Yifan Peng, Le~Lu, Zhiyong Lu, Mohammadhadi Bagheri, and
+  Ronald~M. Summers.
+\newblock {ChestX-ray8}: Hospital-scale chest {X}-ray database and benchmarks
+  on weakly-supervised classification and localization of common thorax
+  diseases.
+\newblock In \emph{Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition (CVPR)}, pages 2097--2106, 2017.
+
+\bibitem[Rajpurkar et~al.(2017)Rajpurkar, Irvin, Zhu, Yang, Mehta, Duan, Ding,
+  Bagul, Langlotz, Shpanskaya, Lungren, and Ng]{rajpurkar2017chexnet}
+Pranav Rajpurkar, Jeremy Irvin, Kaylie Zhu, Brandon Yang, Hershel Mehta, Tony
+  Duan, Daisy Ding, Aarti Bagul, Curtis Langlotz, Katie Shpanskaya, Matthew~P.
+  Lungren, and Andrew~Y. Ng.
+\newblock {CheXNet}: Radiologist-level pneumonia detection on chest {X}-rays
+  with deep learning.
+\newblock \emph{arXiv preprint arXiv:1711.05225}, 2017.
+
+\bibitem[Caplin et~al.(2022)Caplin, Martin, and Marx]{caplin2022calibrating}
+Andrew Caplin, Daniel Martin, and Philip Marx.
+\newblock Calibrating for class weights by modeling machine learning.
+\newblock \emph{arXiv preprint arXiv:2205.04613}, 2022.
+
+\bibitem[Menon et~al.(2021)Menon, Jayasumana, Rawat, Jain, Veit, and
+  Kumar]{menon2021logit}
+Aditya~Krishna Menon, Sadeep Jayasumana, Ankit~Singh Rawat, Himanshu Jain,
+  Andreas Veit, and Sanjiv Kumar.
+\newblock Long-tail learning via logit adjustment.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2021.
+
+\bibitem[Huang et~al.(2017)Huang, Liu, van~der Maaten, and
+  Weinberger]{huang2017densenet}
+Gao Huang, Zhuang Liu, Laurens van~der Maaten, and Kilian~Q. Weinberger.
+\newblock Densely connected convolutional networks.
+\newblock In \emph{Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition (CVPR)}, pages 4700--4708, 2017.
+
+\bibitem[Oakden-Rayner(2020)]{oakdenrayner2020exploring}
+Luke Oakden-Rayner.
+\newblock Exploring large-scale public medical image datasets.
+\newblock \emph{Academic Radiology}, 27\penalty0 (1):\penalty0 106--112, 2020.
+
+\bibitem[Oakden-Rayner et~al.(2020)Oakden-Rayner, Dunnmon, Carneiro, and
+  R{\'e}]{oakdenrayner2020hidden}
+Luke Oakden-Rayner, Jared Dunnmon, Gustavo Carneiro, and Christopher R{\'e}.
+\newblock Hidden stratification causes clinically meaningful failures in
+  machine learning for medical imaging.
+\newblock In \emph{Proceedings of the ACM Conference on Health, Inference, and
+  Learning (CHIL)}, pages 151--159, 2020.
+
+\bibitem[Guo et~al.(2017)Guo, Pleiss, Sun, and Weinberger]{guo2017calibration}
+Chuan Guo, Geoff Pleiss, Yu~Sun, and Kilian~Q. Weinberger.
+\newblock On calibration of modern neural networks.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine
+  Learning (ICML)}, pages 1321--1330, 2017.
+
+\bibitem[Platt(1999)]{platt1999probabilistic}
+John~C. Platt.
+\newblock Probabilistic outputs for support vector machines and comparisons to
+  regularized likelihood methods.
+\newblock In \emph{Advances in Large Margin Classifiers}, pages 61--74. MIT
+  Press, 1999.
+
+\bibitem[Rajaraman et~al.(2022)Rajaraman, Ganesan, and
+  Antani]{rajaraman2022calibration}
+Sivaramakrishnan Rajaraman, Prasanth Ganesan, and Sameer Antani.
+\newblock Deep learning model calibration for improving performance in
+  class-imbalanced medical image classification tasks.
+\newblock \emph{PLOS ONE}, 17\penalty0 (1):\penalty0 e0262838, 2022.
+
+\bibitem[Saerens et~al.(2002)Saerens, Latinne, and
+  Decaestecker]{saerens2002adjusting}
+Marco Saerens, Patrice Latinne, and Christine Decaestecker.
+\newblock Adjusting the outputs of a classifier to new a priori probabilities:
+  a simple procedure.
+\newblock \emph{Neural Computation}, 14\penalty0 (1):\penalty0 21--41, 2002.
+
+\bibitem[Seyyed-Kalantari et~al.(2021)Seyyed-Kalantari, Zhang, McDermott, Chen,
+  and Ghassemi]{seyyedkalantari2021underdiagnosis}
+Laleh Seyyed-Kalantari, Haoran Zhang, Matthew B.~A. McDermott, Irene~Y. Chen,
+  and Marzyeh Ghassemi.
+\newblock Underdiagnosis bias of artificial intelligence algorithms applied to
+  chest radiographs in under-served patient populations.
+\newblock \emph{Nature Medicine}, 27\penalty0 (12):\penalty0 2176--2182, 2021.
+
+\bibitem[Bernhardt et~al.(2022)Bernhardt, Jones, and
+  Glocker]{bernhardt2022potential}
+M{\'e}lanie Bernhardt, Charles Jones, and Ben Glocker.
+\newblock Potential sources of dataset bias complicate investigation of
+  underdiagnosis by machine learning algorithms.
+\newblock \emph{Nature Medicine}, 28:\penalty0 1157--1158, 2022.
+
+\bibitem[Tan and Le(2019)]{tan2019efficientnet}
+Mingxing Tan and Quoc~V. Le.
+\newblock {EfficientNet}: Rethinking model scaling for convolutional neural
+  networks.
+\newblock In \emph{Proceedings of the 36th International Conference on Machine
+  Learning (ICML)}, pages 6105--6114, 2019.
+
+\bibitem[Selvaraju et~al.(2017)Selvaraju, Cogswell, Das, Vedantam, Parikh, and
+  Batra]{selvaraju2017gradcam}
+Ramprasaath~R. Selvaraju, Michael Cogswell, Abhishek Das, Ramakrishna Vedantam,
+  Devi Parikh, and Dhruv Batra.
+\newblock {Grad-CAM}: Visual explanations from deep networks via gradient-based
+  localization.
+\newblock In \emph{Proceedings of the IEEE International Conference on Computer
+  Vision (ICCV)}, pages 618--626, 2017.
+
+\end{thebibliography}

@@ -1,0 +1,20 @@
+{
+  "n_train_images": 77719,
+  "positives": {
+    "Atelectasis": 7345,
+    "Cardiomegaly": 1523,
+    "Effusion": 7679,
+    "Infiltration": 12305,
+    "Mass": 3695,
+    "Nodule": 4199,
+    "Pneumonia": 770,
+    "Pneumothorax": 2370,
+    "Consolidation": 2543,
+    "Edema": 1244,
+    "Emphysema": 1295,
+    "Fibrosis": 1120,
+    "Pleural_Thickening": 2007,
+    "Hernia": 127
+  },
+  "note": "Training split of the V2/V2.1 runs: official train_val_list.txt minus a 10% patient-level validation split (seed 42). Used to recompute the class weights (pos_weight = clip(negatives/positives, 1, 50))."
+}
