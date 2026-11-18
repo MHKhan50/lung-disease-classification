@@ -77,13 +77,13 @@ where $N$ is the number of training images and $P_k$ the number of positives for
 
 \begin{table}[t]
 \centering
-\caption{Test mean AUROC over 14 labels (25,596 images). Intervals are 95\% patient-level bootstrap intervals. The seed 42 run used an image-level bootstrap.}
+\caption{Test mean AUROC over 14 labels (25,596 images). Intervals are 95\% patient-level bootstrap intervals.}
 \label{tab:auroc}
 \begin{tabular}{lcc}
 \toprule
 Model & Mean AUROC & 95\% interval \\
 \midrule
-DenseNet121, seed 42 & 0.801 & 0.796--0.806 \\
+DenseNet121, seed 42 & 0.801 & 0.794--0.806 \\
 DenseNet121, seed 1 & 0.801 & 0.795--0.806 \\
 DenseNet121, seed 2 & 0.803 & 0.797--0.808 \\
 EfficientNet-B0, seed 42 & 0.790 & 0.784--0.795 \\
@@ -106,7 +106,7 @@ Table~\ref{tab:auroc} shows the main results. The three DenseNet121 runs differ 
 
 \begin{table}[t]
 \centering
-\caption{Calibration on the test split, averaged over 14 labels. AUROC is unchanged by both corrections because they are monotonic per label.}
+\caption{Calibration on the test split, averaged over 14 labels. AUROC is unchanged by both corrections because they are monotonic per label. Seed 42 was trained in an earlier run that saved no validation predictions, so Platt scaling could not be fitted for it.}
 \label{tab:calibration}
 \begin{tabular}{lcccccc}
 \toprule
@@ -114,6 +114,7 @@ Table~\ref{tab:auroc} shows the main results. The three DenseNet121 runs differ 
 \cmidrule(lr){2-4}\cmidrule(lr){5-7}
 Model & Raw & Logit adj. & Platt & Raw & Logit adj. & Platt \\
 \midrule
+DenseNet121, seed 42 & 0.265 & 0.017 & -- & 0.175 & 0.058 & -- \\
 DenseNet121, seed 1 & 0.276 & 0.018 & 0.011 & 0.185 & 0.059 & 0.058 \\
 DenseNet121, seed 2 & 0.261 & 0.018 & 0.011 & 0.174 & 0.059 & 0.058 \\
 EfficientNet-B0 & 0.291 & 0.016 & 0.011 & 0.195 & 0.059 & 0.059 \\
@@ -121,9 +122,9 @@ EfficientNet-B0 & 0.291 & 0.016 & 0.011 & 0.195 & 0.059 & 0.059 \\
 \end{tabular}
 \end{table}
 
-Raw probabilities are far too high for every label (Figure~\ref{fig:calibration}): the mean predicted probability is 2.3 to 16 times the test prevalence across the three runs (largest for hernia), and mean ECE is 0.26 to 0.29 (Table~\ref{tab:calibration}). For consolidation, the model predicts 0.49 on average while 7\% of test images have the label.
+Raw probabilities are far too high for every label (Figure~\ref{fig:calibration}): the mean predicted probability is 2.3 to 16 times the test prevalence across seeds 1 and 2 and EfficientNet-B0 (largest for hernia), and mean ECE is 0.26 to 0.29 (Table~\ref{tab:calibration}). For consolidation, the model predicts 0.49 on average while 7\% of test images have the label.
 
-Subtracting $\log w_k$ from the logits removes most of this error without using any validation data: mean ECE falls to 0.016--0.018 and mean Brier score from 0.17--0.20 to 0.059. Platt scaling fitted on 8,805 validation images does slightly better (ECE 0.011, Brier 0.058 to 0.059). The fitted Platt intercepts follow the class-weight offsets closely (correlation between $b_k$ and $-\log w_k$: 0.95), and most fitted slopes are below one (0.59 to 1.28), indicating that the remaining error is mainly over-confidence, which the fixed offset cannot correct. In practice, the closed-form adjustment is a sensible default when no held-out data are available, and a validation-fitted correction is still worth its small cost.
+Subtracting $\log w_k$ from the logits removes most of this error without using any validation data: mean ECE falls to 0.016--0.018 and mean Brier score from 0.17--0.20 to 0.058--0.059. Platt scaling fitted on 8,805 validation images does slightly better (ECE 0.011, Brier 0.058 to 0.059). The fitted Platt intercepts follow the class-weight offsets closely (correlation between $b_k$ and $-\log w_k$: 0.95), and most fitted slopes are below one (0.59 to 1.28), indicating that the remaining error is mainly over-confidence, which the fixed offset cannot correct. In practice, the closed-form adjustment is a sensible default when no held-out data are available, and a validation-fitted correction is still worth its small cost.
 
 \subsection{Prevalence shift limits both corrections}
 \label{sec:shift}

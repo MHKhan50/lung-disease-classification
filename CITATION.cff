@@ -5,6 +5,7 @@ type: software
 authors:
   - family-names: Hussain
     given-names: Muzammal
+    orcid: "https://orcid.org/0009-0001-2570-5686"
 version: v2.1.1
 date-released: 2026-10-31
 doi: 10.5281/zenodo.23065563
