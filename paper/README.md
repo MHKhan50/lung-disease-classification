@@ -1,6 +1,6 @@
 # Paper
 
-**Class weights miscalibrate chest X-ray classifiers by a predictable amount: calibration, prevalence shift and subgroup noise in a reproducible ChestX-ray14 baseline**
+**Class Weights Miscalibrate Chest X-ray Classifiers by a Predictable Amount: Calibration, Prevalence Shift and Subgroup Noise in a Reproducible ChestX-ray14 Baseline**
 
 | File | What it is |
 |---|---|

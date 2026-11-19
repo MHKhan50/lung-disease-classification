@@ -14,7 +14,7 @@ The project started as my MSc project at Glasgow Caledonian University. In 2026 
 
 **[Live demo on Hugging Face](https://huggingface.co/spaces/MHkhan50/chest-xray-14-findings)**: upload a frontal chest X-ray and get calibrated probabilities for 14 findings with a heatmap. It runs entirely in the browser, so the image is never uploaded. Source in [`demo/`](demo/).
 
-**Paper (preprint)**: *Class weights miscalibrate chest X-ray classifiers by a predictable amount*, [doi:10.5281/zenodo.23840865](https://doi.org/10.5281/zenodo.23840865). PDF, LaTeX source and analysis in [`paper/`](paper/).
+**Paper (preprint)**: *Class Weights Miscalibrate Chest X-ray Classifiers by a Predictable Amount*, [doi:10.5281/zenodo.23840865](https://doi.org/10.5281/zenodo.23840865). PDF, LaTeX source and analysis in [`paper/`](paper/).
 
 > Research code only. Not a medical device and not for diagnosis.
 
