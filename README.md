@@ -220,6 +220,19 @@ jupyter notebook
 
 ## Citation
 
+```bibtex
+@misc{hussain2026lung,
+  author    = {Hussain, Muzammal},
+  title     = {{Class Weights Miscalibrate Chest X-ray Classifiers by a Predictable Amount: Calibration, Prevalence Shift and Subgroup Noise in a Reproducible ChestX-ray14 Baseline}},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.23840865},
+  url       = {https://doi.org/10.5281/zenodo.23840865}
+}
+```
+
+Software (code, notebooks, results): [doi:10.5281/zenodo.23065563](https://doi.org/10.5281/zenodo.23065563).
+
 If you use this code, please cite it (GitHub's *Cite this repository* button uses [`CITATION.cff`](CITATION.cff)):
 
 > Hussain, M. (2026). *Lung Disease Classification from Chest X-rays* (Version v2.1.1) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23065563

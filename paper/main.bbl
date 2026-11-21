@@ -1,4 +1,4 @@
-\begin{thebibliography}{15}
+\begin{thebibliography}{17}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -98,6 +98,21 @@ M{\'e}lanie Bernhardt, Charles Jones, and Ben Glocker.
 \newblock Potential sources of dataset bias complicate investigation of
   underdiagnosis by machine learning algorithms.
 \newblock \emph{Nature Medicine}, 28:\penalty0 1157--1158, 2022.
+
+\bibitem[Hussain(2026{\natexlab{a}})]{hussain2026ptbxl}
+Muzammal Hussain.
+\newblock {Small Convolutional Networks for PTB-XL Superclasses: A Five-Seed
+  Comparison with Patient-Level Intervals and Selective Prediction}.
+\newblock Zenodo, 2026{\natexlab{a}}.
+\newblock URL \url{https://doi.org/10.5281/zenodo.24407647}.
+
+\bibitem[Hussain(2026{\natexlab{b}})]{hussain2026fracatlas}
+Muzammal Hussain.
+\newblock {Pretrained Backbones, Calibration and Referral for Fracture
+  Detection on FracAtlas: A Three-Seed Comparison of a Small CNN, ConvNeXt,
+  DINOv2 and YOLO}.
+\newblock Zenodo, 2026{\natexlab{b}}.
+\newblock URL \url{https://doi.org/10.5281/zenodo.24429477}.
 
 \bibitem[Tan and Le(2019)]{tan2019efficientnet}
 Mingxing Tan and Quoc~V. Le.
